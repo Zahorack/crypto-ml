@@ -2,6 +2,7 @@ from abc import ABC
 from typing import Iterator, Optional
 from dataclasses import dataclass
 import tweepy
+import time
 
 from crypto_ml.api import ApiHandler
 from crypto_ml.api import ApiSample
@@ -28,11 +29,15 @@ class TwitterApi(ApiHandler, ABC):
 
     def __init__(self,
                  keyword: str,
-                 max_sample_count: int,
-                 language: Optional[str] = 'en'):
+                 max_sample_count: Optional[int] = None,
+                 language: Optional[str] = 'en',
+                 request_rate_timeout: Optional[int] = 60,
+                 should_wait_for_requests: Optional[bool] = True):
         self.keyword = keyword
         self.max_sample_count = max_sample_count
         self.language = language
+        self.request_rate_timeout = request_rate_timeout
+        self.should_wait_for_requests = should_wait_for_requests
 
     @staticmethod
     def connection():
@@ -58,11 +63,14 @@ class TwitterApi(ApiHandler, ABC):
         Iterate Tweet samples
         """
         sample_id = 0
-        try:
-            for tweet in tweepy.Cursor(self.connection().search,
-                                       q=self.keyword,
-                                       lang=self.language,
-                                       count=self.max_sample_count).items():
+        cursor = tweepy.Cursor(self.connection().search,
+                               q=self.keyword,
+                               lang=self.language,
+                               count=self.max_sample_count).items()
+        while True:
+            try:
+                tweet = cursor.next()
+
                 yield TwitterSample(
                     text=tweet.text,
                     user_name=tweet.user.name,
@@ -75,9 +83,18 @@ class TwitterApi(ApiHandler, ABC):
                     created_at=tweet.created_at)
 
                 sample_id += 1
-                if sample_id >= self.max_sample_count:
+                if self.max_sample_count and sample_id >= self.max_sample_count:
                     break
 
-        except Exception as e:
-            print(f"Error while iterating Twitter API {e}")
+            except tweepy.TweepError as e:
+                if self.should_wait_for_requests:
+                    print(f"Error API request rate limit reached {e}. Sleeping for {self.request_rate_timeout} seconds")
+                    time.sleep(self.request_rate_timeout)
+                    continue
+                else:
+                    print(f"Error API request rate limit reached {e}. Iteration end.")
+                    break
+
+            except Exception as e:
+                print(f"Error while iterating Twitter API {e}")
 
