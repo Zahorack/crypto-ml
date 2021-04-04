@@ -1,6 +1,13 @@
 from typing import Iterator
 
-from crypto_ml.api.sample import ApiSample
+from dataclasses import dataclass
+
+
+@dataclass
+class ApiSample:
+    """
+    Abstract base class for specific sample from API
+    """
 
 
 class ApiHandler:

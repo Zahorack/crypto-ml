@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import tweepy
 
 from crypto_ml.api import ApiHandler
-from crypto_ml.api.sample import ApiSample
+from crypto_ml.api import ApiSample
 from crypto_ml import config
 
 
@@ -28,8 +28,10 @@ class TwitterApi(ApiHandler, ABC):
 
     def __init__(self,
                  keyword: str,
+                 max_sample_count: int,
                  language: Optional[str] = 'en'):
         self.keyword = keyword
+        self.max_sample_count = max_sample_count
         self.language = language
 
     @staticmethod
@@ -52,11 +54,15 @@ class TwitterApi(ApiHandler, ABC):
             print(f"Unable to access Twitter API {e}")
 
     def iterate(self) -> Iterator[ApiSample]:
-
-        with self.connection() as con:
-            for tweet in tweepy.Cursor(con.search,
+        """
+        Iterate Tweet samples
+        """
+        sample_id = 0
+        try:
+            for tweet in tweepy.Cursor(self.connection().search,
                                        q=self.keyword,
-                                       lang=self.language).items():
+                                       lang=self.language,
+                                       count=self.max_sample_count).items():
                 yield TwitterSample(
                     text=tweet.text,
                     user_name=tweet.user.name,
@@ -67,3 +73,11 @@ class TwitterApi(ApiHandler, ABC):
                     favorite_count=tweet.favorite_count,
                     retweet_count=tweet.retweet_count,
                     created_at=tweet.created_at)
+
+                sample_id += 1
+                if sample_id >= self.max_sample_count:
+                    break
+
+        except Exception as e:
+            print(f"Error while iterating Twitter API {e}")
+
