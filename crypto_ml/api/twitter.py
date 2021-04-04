@@ -10,7 +10,7 @@ from crypto_ml import config
 
 
 @dataclass
-class TwitterSample:
+class TwitterSample(ApiSample):
     text: str
     user_name: str
     user_statuses_count: str
