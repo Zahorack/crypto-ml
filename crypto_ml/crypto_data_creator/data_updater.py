@@ -10,6 +10,7 @@ class DataUpdater:
     last_timestamp: str
 
     def get_last_timestamp(self):
+        print("Collecting last time capsule")
         file = open(self.address + "/last_timestamp", "r")
         [date, timestamp] = file.readline().split(',')
 
@@ -21,7 +22,10 @@ class DataUpdater:
         self.currency = used_currency
 
     def update(self):
+    
         self.get_last_timestamp()
+        
+        print("Creating .csv data for 1 day with 4 minutes precision for " + self.coin)
 
         dc = coin_gecko_api_data_creator.LearningDataCreator('usd')
 
@@ -46,10 +50,16 @@ class DataUpdater:
         dc = coin_gecko_api_data_creator.LearningDataCreator('usd')
 
         dc.create_csv_from_data_interval(address=self.address, coin=self.coin, time_interval=time_chain.past_interval)
+        
+        print("Creating .csv data for past for " + self.coin)
 
         dc.create_csv_from_data_interval(address=self.address, coin=self.coin, time_interval=time_chain.ninety_days_interval)
+        
+        print("Creating .csv data for 90 days with hour precision for " + self.coin)
 
         dc.create_csv_from_data_interval(address=self.address, coin=self.coin, time_interval=time_chain.one_dat_interval)
+        
+        print("Creating .csv data for 1 day with 4 minutes precision for " + self.coin)
 
         self.create_last_hitpoint(data_creator=dc)
 
