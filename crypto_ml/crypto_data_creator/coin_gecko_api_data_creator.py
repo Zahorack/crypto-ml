@@ -14,8 +14,10 @@ def to_numpy_array(data):
     [prices, market_caps, total_volumes] = [list(zip(*data["prices"])), list(zip(*data["market_caps"])),
                                             list(zip(*data["total_volumes"]))]
 
+    if data_are_corrupted([prices, market_caps, total_volumes]):
+        return []
     for (timestamp, price, market_cap, volume) in itertools.zip_longest(prices[0], prices[1], market_caps[1],
-                                                                        total_volumes[1], fillvalue=-1):
+                                                                        total_volumes[1], fillvalue='empty'):
         ret_val.append([time_data.oversized_timestamp_to_date(timestamp), timestamp / 1000.0, price, market_cap, volume])
     
     print("Unpacked successfully")
@@ -24,8 +26,9 @@ def to_numpy_array(data):
 
 
 def data_are_corrupted(data):
-    return len(data["prices"]) == 0 or len(data["market_caps"]) == 0 or len(data["total_volumes"]) == 0
+    [prices, market_caps, total_volumes] = data
 
+    return len(prices) == 0 or len(market_caps) == 0 or len(total_volumes) == 0
 
 def unzip_coin_gecko_data(coin_gecko_data):
     if data_are_corrupted(coin_gecko_data):
@@ -55,6 +58,7 @@ class LearningDataCreator:
     currency_using: str
     last_used_timestamp: str
 
+    data_empty: bool
     def __init__(self, currency_using):
         self.coin_gecko = CoinGeckoAPI()
         self.currency_using = currency_using
@@ -78,6 +82,8 @@ class LearningDataCreator:
 
         data = self.get_data_in_time_interval(from_t=from_t, to_t=to_t, coin=coin)
 
+        if len(data) == 0:
+            return
         data_frame = self.get_standard_data_frame(data=data)
 
         create_csv(data=data_frame, coin_name=coin, address=address, from_date_timestamp=from_t, to_date_timestamp=to_t)
