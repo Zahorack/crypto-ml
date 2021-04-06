@@ -1,10 +1,11 @@
-import supported_coins
 import sys
 import arguments
 import time
 from time_data import TimeChain
 
-import data_updater
+from crypto_ml import config
+from crypto_ml.config.constants import constants
+
 
 if __name__ == '__main__':
 
@@ -12,11 +13,13 @@ if __name__ == '__main__':
 
     time_chain = TimeChain()
 
+    supported_coins = config.get('supported_coins')
+
     if args.use_std_coins:
 
         if args.data_policy == 'create_new':
 
-            for coin in supported_coins.supported_coins:
+            for coin in supported_coins:
                 updater = data_updater.DataUpdater(address=args.to_address, coin=coin, used_currency='usd')
 
                 updater.create_new_data_base()
@@ -25,7 +28,7 @@ if __name__ == '__main__':
 
         if args.data_policy == 'push_to_existing':
 
-            for coin in supported_coins.supported_coins:
+            for coin in supported_coins:
                 updater = data_updater.DataUpdater(address=args.to_address, coin=coin, used_currency='usd')
 
                 updater.update()
