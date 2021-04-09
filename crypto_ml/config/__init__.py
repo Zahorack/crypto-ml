@@ -3,9 +3,12 @@ import json
 import os
 
 from typing import List, Union, Optional, Any
+from crypto_ml.config.constants import Constants
 
 _config = {}
 _config_path = os.path.join(os.path.dirname(__file__), 'config.json')
+
+constants = Constants()
 
 
 def _get_config_mtime():
