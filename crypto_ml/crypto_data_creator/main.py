@@ -4,8 +4,8 @@ import time
 from time_data import TimeChain
 
 from crypto_ml import config
-from crypto_ml.config.constants import constants
 
+from crypto_ml.crypto_data_creator import data_updater
 
 if __name__ == '__main__':
 

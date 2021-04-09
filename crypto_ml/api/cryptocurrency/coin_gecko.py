@@ -2,10 +2,10 @@ from dataclasses import dataclass
 from typing import Iterator, Optional
 from pycoingecko import CoinGeckoAPI
 import logging
-import json
-import itertools
 
-from crypto_ml.api import ApiHandler, ApiSample
+
+from crypto_ml.api import ApiIterator, ApiSample
+from crypto_ml import config
 
 LOG = logging.getLogger(__name__)
 
@@ -18,24 +18,36 @@ class CryptoGeckoSample(ApiSample):
     volume: float
 
 
-class CryptoGeckoApi(ApiHandler):
+class CryptoGeckoApi(ApiIterator):
     """
     Coin gecko API handler used for cryptocurrency historical data downloading
     """
+    def __init__(self,
+                 coin: str,
+                 from_timestamp: str,
+                 to_timestamp: str):
+        self.coin = coin
+        self.from_timestamp = from_timestamp
+        self.to_timestamp = to_timestamp
+
+    @property
+    def api_type(self) -> str:
+        return 'CRYPTOCURRENCY'
+
+    @property
+    def api_platform(self) -> str:
+        return 'GECKO'
 
     def iterate(self) -> Iterator[ApiSample]:
 
         try:
             api = CoinGeckoAPI()
 
-            timestamp_from = '1605056000'
-            timestamp_to = '1605099600'
-
             samples = api.get_coin_market_chart_range_by_id(
-                id='bitcoin',
-                vs_currency='usd',
-                from_timestamp=timestamp_from,
-                to_timestamp=timestamp_to
+                id=self.coin,
+                vs_currency=config.constants.DEFAULT_FIAT_CURRENCY,
+                from_timestamp=self.from_timestamp,
+                to_timestamp=self.to_timestamp
             )
 
             for (price, market, volume) in zip(samples['prices'], samples['market_caps'], samples['total_volumes']):

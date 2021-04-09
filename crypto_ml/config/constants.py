@@ -8,3 +8,6 @@ class Constants:
         # General constants
         self.SECONDS_IN_DAY = 86400
 
+        self.DEFAULT_FIAT_CURRENCY = 'usd'
+
+

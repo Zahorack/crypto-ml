@@ -1,4 +1,10 @@
 {
+
+  "log_dir": "./logs",
+  "data_storage_dir": "./data",
+  "version": 1,
+  "batch_size": 512,
+
   "twitter": {
     "consumer_key": "",
     "consumer_secret": "",

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import tweepy
 import time
 
-from crypto_ml.api import ApiHandler
+from crypto_ml.api import ApiIterator
 from crypto_ml.api import ApiSample
 from crypto_ml import config
 
@@ -22,7 +22,7 @@ class TwitterSample(ApiSample):
     created_at: str
 
 
-class TwitterApi(ApiHandler, ABC):
+class TwitterApi(ApiIterator, ABC):
     """
     Twitter API handler class
     """
@@ -38,6 +38,14 @@ class TwitterApi(ApiHandler, ABC):
         self.language = language
         self.request_rate_timeout = request_rate_timeout
         self.should_wait_for_requests = should_wait_for_requests
+
+    @property
+    def api_type(self) -> str:
+        return 'SOCIAL'
+
+    @property
+    def api_platform(self) -> str:
+        return 'TWITTER'
 
     @staticmethod
     def connection():

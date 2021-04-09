@@ -183,3 +183,14 @@
 2021-04-06 22:26:19,108 15148  MainThread       __main__                 DEBUG    Crypto-ML application begin.
 2021-04-06 22:26:50,576 17264  MainThread       __main__                 DEBUG    Crypto-ML application begin.
 2021-04-06 22:29:17,509 12924  MainThread       __main__                 DEBUG    Crypto-ML application begin.
+2021-04-06 22:49:59,171 14796  MainThread       __main__                 DEBUG    Crypto-ML application begin.
+2021-04-06 22:50:58,798 19104  MainThread       __main__                 DEBUG    Crypto-ML application begin.
+2021-04-06 22:50:58,798 19104  MainThread       __main__                 ERROR    Cannot create twitter dataset iterate() missing 1 required positional argument: 'self'
+2021-04-06 22:51:05,359 1768   MainThread       __main__                 DEBUG    Crypto-ML application begin.
+2021-04-06 22:57:22,459 20224  MainThread       __main__                 DEBUG    Crypto-ML application begin.
+2021-04-06 22:57:24,698 7772   MainThread       __main__                 DEBUG    Crypto-ML application begin.
+2021-04-06 22:57:30,994 9112   MainThread       __main__                 DEBUG    Crypto-ML application begin.
+2021-04-06 22:57:30,994 9112   MainThread       __main__                 ERROR    Cannot create twitter dataset __init__() missing 1 required positional argument: 'coin'
+2021-04-06 22:58:24,579 18016  MainThread       __main__                 DEBUG    Crypto-ML application begin.
+2021-04-06 22:58:39,810 6944   MainThread       __main__                 DEBUG    Crypto-ML application begin.
+2021-04-06 23:00:21,268 21684  MainThread       __main__                 DEBUG    Crypto-ML application begin.
