@@ -1,10 +1,11 @@
 import datetime
 import time
 
-from pytrends.request import TrendReq  # pip install pytrends - Written for both Python 2.7+ and Python 3.3+
-from supported_coins import supported_coins
+from pytrends.request import TrendReq
 from datetime import date
 import os
+
+from crypto_ml import config
 
 key_phrases_kernel = [
     [],
@@ -21,7 +22,7 @@ key_phrases_kernel = [
     ['down']
 ]
 
-for coin in supported_coins:
+for coin in config.get('supported_coins'):
 
     os.makedirs(coin, exist_ok=True)
 
