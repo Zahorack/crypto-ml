@@ -6,7 +6,7 @@ import time
 
 from crypto_ml.api import ApiIterator
 from crypto_ml.api import ApiSample
-from crypto_ml import config
+from crypto_ml.config import constants
 
 
 @dataclass
@@ -53,10 +53,10 @@ class TwitterApi(ApiIterator, ABC):
         Try to resolve and get Twitter API connection
         """
         try:
-            auth = tweepy.OAuthHandler(consumer_key=config.get('twitter', 'consumer_key'),
-                                       consumer_secret=config.get('twitter', 'consumer_secret'))
-            auth.set_access_token(key=config.get('twitter', 'access_token'),
-                                  secret=config.get('twitter', 'access_token_secret'))
+            auth = tweepy.OAuthHandler(consumer_key=constants.TWITTER_CONSUMER_KEY,
+                                       consumer_secret=constants.TWITTER_CONSUMER_SECRET)
+            auth.set_access_token(key=constants.TWITTER_ACCESS_TOKEN,
+                                  secret=constants.TWITTER_ACCESS_TOKEN_SECRET)
 
             api = tweepy.API(auth)
             api.verify_credentials()

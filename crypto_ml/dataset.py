@@ -7,7 +7,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime
 from typing import Optional
 
-from crypto_ml import config
+from crypto_ml.config import constants
 from crypto_ml.api import ApiIterator
 
 LOG = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ class DatasetSettings:
     """
     Wrapper used for storing metadata to separated json file
     """
-    DATASET_STORAGE_PATH = config.get('data_storage_dir')
+    DATASET_STORAGE_PATH = constants.DATA_STORAGE_DIR
     DATASET_SETTINGS_FILE = 'dataset_settings.json'
 
     name: str
@@ -38,10 +38,10 @@ class Dataset:
     """
     Dataset class for generic data handling, storing from API iterator and storage
     """
-    VERSION = config.get('version')
-    BATCH_SIZE = config.get('batch_size')
+    VERSION = constants.VERSION
+    BATCH_SIZE = constants.BATCH_SIZE
     DATASET_SETTINGS_FILE = 'dataset_settings.json'
-    DATASET_STORAGE_PATH = config.get('data_storage_dir')
+    DATASET_STORAGE_PATH = constants.DATA_STORAGE_DIR
 
     name: str
 

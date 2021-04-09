@@ -4,7 +4,7 @@ import os
 
 from crypto_ml.api.social.twitter import TwitterApi
 from crypto_ml.api.cryptocurrency.coin_gecko import CryptoGeckoApi
-from crypto_ml import config
+from crypto_ml.config import constants
 
 from logging.handlers import RotatingFileHandler
 
@@ -15,7 +15,7 @@ LOG = logging.getLogger(__name__)
 def cli():
     if __name__ == '__main__':
         logging.basicConfig(level=0)
-        log_dir = config.get('log_dir')
+        log_dir = constants.LOG_DIR
 
         if not os.path.isabs(log_dir):
             log_dir = os.path.join(os.path.dirname(__file__), log_dir)

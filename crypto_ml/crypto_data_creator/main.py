@@ -3,7 +3,7 @@ import arguments
 import time
 from time_data import TimeChain
 
-from crypto_ml import config
+from crypto_ml.config import constants
 
 from crypto_ml.crypto_data_creator import data_updater
 
@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     time_chain = TimeChain()
 
-    supported_coins = config.get('supported_coins')
+    supported_coins = constants.SUPPORTED_COINS
 
     if args.use_std_coins:
 
